@@ -1,0 +1,9 @@
+package com.HMS.Appointment.Service;
+
+import com.HMS.Appointment.Dto.AppoinmentDto;
+
+public interface AppointmentService {
+	
+	AppointmentDto createAppointment(AppoinmentDto appointmentDto);
+
+}

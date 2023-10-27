@@ -1,0 +1,5 @@
+package com.HMS.Appointment.Service;
+
+public interface AppointmentService {
+
+}

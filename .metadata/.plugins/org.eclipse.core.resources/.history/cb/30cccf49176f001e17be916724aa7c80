@@ -1,0 +1,147 @@
+package com.HMS.Doctor.ServiceImpl;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
+
+import com.HMS.Doctor.Dto.ApiResponseDto;
+import com.HMS.Doctor.Dto.DepartmentDto;
+import com.HMS.Doctor.Dto.DoctorDto;
+import com.HMS.Doctor.Entity.Doctor;
+import com.HMS.Doctor.Exception.ResourceNotFoundException;
+import com.HMS.Doctor.Repository.DoctorRepository;
+import com.HMS.Doctor.Service.DoctorService;
+
+@Service
+public class DoctorServiceImpl implements DoctorService {
+	
+	@Autowired
+	DoctorRepository doctorRepo;
+	
+	@Autowired
+	ModelMapper mapper;
+	
+	@Autowired
+	RestTemplate restTemplate;
+	
+	@Autowired
+	private WebClient webClient;
+
+	@Override
+	public DoctorDto createDoctor(DoctorDto doctorDto) {
+		
+		String doctorId=UUID.randomUUID().toString();
+		doctorDto.setDoctorId(doctorId);
+		Doctor doctor=mapper.map(doctorDto, Doctor.class);
+		Doctor newDoctor=doctorRepo.save(doctor);
+		DoctorDto newDoctorDto=mapper.map(newDoctor, DoctorDto.class);
+		return newDoctorDto;
+	}
+
+	@Override
+	public DoctorDto findById(String doctorId) {
+		Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(
+	                ()->new ResourceNotFoundException("Doctor","id",doctorId)
+	        );
+		DoctorDto newDoctorDto=mapper.map(doctor, DoctorDto.class);
+		return newDoctorDto;
+	}
+	//WebFlus--WebClient
+	//Calling Department Using Department Name 
+	public ApiResponseDto findByIdWithDepartmentName(String doctorId) {
+		Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(
+                ()->new RuntimeException("User Not Found With this UserId!!!!")
+        );
+		DoctorDto doctorDto=mapper.map(doctor, DoctorDto.class);
+		DepartmentDto departmentDto=webClient.get().uri("http://localhost:6060/Department/byName/"+doctorDto.getDepartmentName())
+		.retrieve()
+		.bodyToMono(DepartmentDto.class)
+		.block();
+		ApiResponseDto apiResponseDto=new ApiResponseDto();
+		apiResponseDto.setDoctor(doctorDto);
+		apiResponseDto.setDepartment(departmentDto);
+		return apiResponseDto;
+		
+	}
+	//Using RestTemplate
+	//Calling Department Using DepartmentCode
+	
+	public ApiResponseDto findByIdWithDepartmentCode(String doctorId) {
+		Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(
+                ()->new RuntimeException("User Not Found With this UserId!!!!")
+        );
+		DoctorDto doctorDto=mapper.map(doctor, DoctorDto.class);
+		ResponseEntity<DepartmentDto> responseEntity=restTemplate
+				.getForEntity("http://localhost:6060/Department/byCode/"+doctorDto.getDepartmentCode(), DepartmentDto.class);
+		DepartmentDto departmentDto=responseEntity.getBody();
+		ApiResponseDto apiResponseDto=new ApiResponseDto();
+		apiResponseDto.setDoctor(doctorDto);
+		apiResponseDto.setDepartment(departmentDto);
+		return apiResponseDto;
+	}
+
+
+	@Override
+	public List<DoctorDto> findAlldoctor() {
+		List<Doctor>doctorList=doctorRepo.findAll();
+	       List<DoctorDto> dtoList= doctorList.stream()
+	               .map(user->mapper.map(user,DoctorDto.class))
+	               .collect(Collectors.toList());
+	        return dtoList;
+	}
+
+	@Override
+	public DoctorDto updateDoctor(DoctorDto doctorDto, String doctorId) {
+		Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(
+                ()->new RuntimeException("User Not Found With this UserId!!!!")
+        );
+		doctor.setFirstName(doctorDto.getFirstName());
+		doctor.setLastName(doctorDto.getLastName());
+		doctor.setEmail(doctorDto.getEmail());
+		doctor.setDob(doctorDto.getDob());
+		doctor.setPosition(doctor.getPosition());
+		doctor.setMobile(doctorDto.getMobile());
+		doctor.setDepartmentCode(doctorDto.getDepartmentCode());
+		doctor.setDepartmentName(doctorDto.getDepartmentName());
+		Doctor savedDoctor=doctorRepo.save(doctor);
+		DoctorDto savedDto=mapper.map(savedDoctor, DoctorDto.class);
+		return savedDto;
+	}
+
+	@Override
+	public String deleteDoctorById(String doctorId) {
+		Doctor doctor=doctorRepo.findById(doctorId).orElseThrow(
+                ()->new RuntimeException("User Not Found With this UserId!!!!")
+        );
+		doctorRepo.deleteById(doctorId);
+		return "Doctor Removed !!!";
+	}
+
+	@Override
+	public List<DoctorDto> findByDepartmentCode(String departmentCode) {
+		List<Doctor> listOfDoctors=doctorRepo.findByDepartmentCode(departmentCode);
+		List<DoctorDto> listOfDoctorsDto=listOfDoctors.stream()
+				.map(e->mapper.map(e, DoctorDto.class)).collect(Collectors.toList());
+		return listOfDoctorsDto;
+	}
+
+	@Override
+	public List<DoctorDto> findByDepartmentName(String departmentName) {
+		List<Doctor> listOfDoctors=doctorRepo.findByDepartmentName(departmentName);
+		List<DoctorDto> listOfDoctorsDto=listOfDoctors.stream()
+				.map(e->mapper.map(e, DoctorDto.class)).collect(Collectors.toList());
+		return listOfDoctorsDto;
+	}
+
+	
+
+	
+
+}

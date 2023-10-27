@@ -1,0 +1,5 @@
+package com.HMS.Appointment.Entity;
+
+public class BookingDto {
+
+}

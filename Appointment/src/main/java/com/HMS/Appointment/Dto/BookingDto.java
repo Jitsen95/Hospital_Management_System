@@ -1,0 +1,20 @@
+package com.HMS.Appointment.Dto;
+
+import java.util.Date;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class BookingDto {
+	
+	private String appointmentId;
+	private int consultationFee;
+	private Date bookingDate;
+
+}

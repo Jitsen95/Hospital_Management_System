@@ -1,0 +1,5 @@
+package com.HMS.Appointment.Configuration;
+
+public class ProjectConfig {
+
+}

@@ -1,0 +1,5 @@
+package com.HMS.Appointment.Repository;
+
+public interface AppoinmentRepository {
+
+}

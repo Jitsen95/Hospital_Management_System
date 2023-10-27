@@ -1,0 +1,31 @@
+package com.HMS.Appointment.ServiceImpl;
+
+import java.util.UUID;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import com.HMS.Appointment.Dto.AppointmentDto;
+import com.HMS.Appointment.Entity.Appointment;
+import com.HMS.Appointment.Repository.AppoinmentRepository;
+import com.HMS.Appointment.Service.AppointmentService;
+
+public class AppoinmentServiceImpl implements AppointmentService{
+	
+	@Autowired
+	AppoinmentRepository appointmentRepo;
+	
+	@Autowired
+	ModelMapper mapper;
+
+	@Override
+	public AppointmentDto createAppointment(AppointmentDto appointmentDto) {
+		String appointmentId=UUID.randomUUID().toString();
+		appointmentDto.setAppointmentId(appointmentId);
+		Appointment appointment=mapper.map(appointmentDto,Appointment.class);
+		Appointment savedappointment =appointmentRepo.save(appointment);
+		AppointmentDto savedDto=mapper.map(savedappointment, AppointmentDto.class);
+		return savedDto;
+	}
+
+}

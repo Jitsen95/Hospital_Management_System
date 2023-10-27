@@ -1,0 +1,5 @@
+package com.HMS.Appointment.ServiceImpl;
+
+public interface UserApiClient {
+
+}

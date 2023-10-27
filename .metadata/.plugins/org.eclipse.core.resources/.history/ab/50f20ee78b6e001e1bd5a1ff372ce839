@@ -1,0 +1,12 @@
+server.port=9191
+spring.application.name=API_GATEWAY
+eureka.instance.client.serverUrl.defaultZone=http://localhost:8761/eureka/
+
+
+
+
+spring.cloud.gateway.routes[0].id=DOCTOR_SERVICE
+spring.cloud.gateway.routes[0].uri=lb://localhost:808O/DOCTOR_SERVICE
+spring.cloud.gateway.routes[0].predicates[0]=Path=/Doctor/**
+
+

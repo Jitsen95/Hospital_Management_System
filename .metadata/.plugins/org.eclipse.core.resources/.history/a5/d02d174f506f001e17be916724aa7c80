@@ -1,0 +1,20 @@
+package com.HMS.Appointment.ServiceImpl;
+
+import com.HMS.Appointment.Dto.AppointmentDto;
+import com.HMS.Appointment.Entity.DoctorDto;
+
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class ApiResponseDto {
+	
+	private DoctorDto doctor;
+	private AppointmentDto appointmentDto;
+
+}

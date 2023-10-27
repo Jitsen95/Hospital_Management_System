@@ -1,0 +1,28 @@
+package com.HMS.Appointment.Dto;
+
+import java.util.Date;
+
+import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+
+public class AppointmentDto {
+	
+	private String appointmentId;
+	private int consultationFee;
+	private Date bookingDate;
+	@NotNull(message="Provide UserId")
+	private String userId;
+	@NotNull(message="Provide DoctorId")
+	private String doctorId;
+	@NotNull(message="Provide DepartmentId")
+	private String departmentId;
+	
+
+}

@@ -1,0 +1,32 @@
+package com.HMS.Department.Service;
+
+import java.util.List;
+
+import com.HMS.Department.Dto.ApiResponseDto;
+import com.HMS.Department.Dto.DepartmentDto;
+import com.HMS.Department.Model.Department;
+
+public interface DepartmentService {
+	
+	DepartmentDto createDepartment(DepartmentDto departmentDto);
+
+	DepartmentDto findById(String departmentId);
+	DepartmentDto findByDepartmentId(String departmentId);
+
+    List<DepartmentDto> findAllDepartment(int pageNumber,int pageSize);
+
+    DepartmentDto updateDepartment(DepartmentDto departmentDto,String departmentId);
+
+    String deleteDepartmentById(String departmentId);
+    
+   ApiResponseDto findByCode(String departmentCode);
+   
+   DepartmentDto findByDepartmentName(String departmentName);
+   
+   DepartmentDto findByDepartmentCode(String departmentCode);
+   
+   ApiResponseDto findByDepartmentNameWithDoctorList(String departmentName);
+   ApiResponseDto findByDepartmentCodeWithDoctorList(String departmentCode);
+    
+
+}

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<projectDescription>
+	<name>Microservice</name>
+	<comment></comment>
+	<projects>
+		<project>api-gateway</project>
+		<project>config-Server</project>
+		<project>Department</project>
+		<project>Doctor</project>
+		<project>Service-Registry</project>
+		<project>User</project>
+	</projects>
+	<buildSpec>
+	</buildSpec>
+	<natures>
+	</natures>
+</projectDescription>

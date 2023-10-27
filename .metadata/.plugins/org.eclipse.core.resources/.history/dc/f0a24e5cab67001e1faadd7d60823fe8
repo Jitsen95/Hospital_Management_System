@@ -1,0 +1,114 @@
+package com.HMS.User.ServiceImplementation;
+
+import com.HMS.User.Dto.UserDto;
+import com.HMS.User.Entity.User;
+import com.HMS.User.Exception.ResourceNotFoundException;
+import com.HMS.User.Repository.UserRepository;
+import com.HMS.User.Service.UserService;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+@Service
+public class ServiceImpl implements UserService {
+
+    @Autowired
+    UserRepository userRepo;
+
+    @Autowired
+    ModelMapper mapper;
+
+    @Override
+    public UserDto createUser(UserDto userDto) {
+        String userId = UUID.randomUUID().toString();
+        userDto.setUserId(userId);
+        User user = mapper.map(userDto, User.class);
+        User savedUser = userRepo.save(user);
+        UserDto newDto = mapper.map(savedUser, UserDto.class);
+        return newDto;
+    }
+
+    @Override
+    public UserDto findById(String userId) {
+        User user=userRepo.findById(userId).orElseThrow(
+                ()->new ResourceNotFoundException("User", "UserId", userId)
+        );
+        UserDto userDto=mapper.map(user,UserDto.class);
+        return userDto;
+    }
+
+    @Override
+    public List<UserDto> findAllUser() {
+        List<User> userList=userRepo.findAll();
+       List<UserDto> dtoList= userList.stream()
+               .map(user->mapper.map(user,UserDto.class))
+               .collect(Collectors.toList());
+        return dtoList;
+    }
+
+    @Override
+    public UserDto updateUser(UserDto userDto, String userId) {
+        User user=userRepo.findById(userId).orElseThrow(
+                ()->new ResourceNotFoundException("User", "UserId", userId)
+        );
+        user.setFirstName(userDto.getFirstName());
+        user.setLastName(userDto.getLastName());
+        user.setEmail(userDto.getEmail());
+        user.setCity(userDto.getCity());
+        user.setAge(userDto.getAge());
+        user.setMobile(userDto.getMobile());
+        user.setGender(userDto.getGender());
+        User updatedUser=userRepo.save(user);
+        UserDto updatedDto=mapper.map(updatedUser,UserDto.class);
+        return updatedDto;
+    }
+
+    @Override
+    public String deleteUserById(String userId) {
+        User user=userRepo.findById(userId).orElseThrow(
+                ()->new ResourceNotFoundException("User", "UserId", userId)
+        );
+        userRepo.deleteById(userId);
+        return "User Removed Successfully!!";
+    }
+
+	@Override
+	public List<UserDto> findByFirstName(String firstName) {
+		List<User>userListByName=userRepo.findByFirstName(firstName);
+		List<UserDto>dtoList=userListByName.stream()
+				.map(user->mapper.map(userListByName, UserDto.class))
+				.collect(Collectors.toList());
+		return dtoList;
+	}
+
+	@Override
+	public UserDto findByEmail(String email) {
+		User userByEmail=userRepo.findByEmail(email);
+		UserDto userDto=mapper.map(userByEmail, UserDto.class);
+		return userDto;
+	}
+
+	@Override
+	public List<UserDto> findByCity(String city) {
+		List<User>listByCity=userRepo.findByCity(city);
+		List<UserDto> dtoList=listByCity.stream().map(user->mapper.map(listByCity, UserDto.class)).collect(Collectors.toList());
+		return dtoList;
+	}
+
+	@Override
+	public UserDto findByMobile(long mobile) {
+		User user=userRepo.findByMobile(mobile);
+		UserDto userDto=mapper.map(user, UserDto.class);
+	
+		return userDto;
+	}
+
+
+
+
+
+
+}

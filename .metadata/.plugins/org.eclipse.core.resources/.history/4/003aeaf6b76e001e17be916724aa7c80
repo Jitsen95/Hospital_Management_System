@@ -1,0 +1,25 @@
+package com.HMS.Appointment.Dto;
+
+import java.util.Date;
+
+public class AppointmentDto {
+	
+	private String appointmentId;
+	private int consultationFee;
+	private Date bookingDate;
+	
+	private String userId;
+	private String userFirstName;
+	private String userLastName;
+	private Long userEmail;
+	private String userMobile;
+	
+	private String doctorId;
+	private String doctorFirstName;
+	private String doctorLastName;
+	private Long doctorMobile;
+	
+	private String departmentId;
+	private String departmentName;
+
+}

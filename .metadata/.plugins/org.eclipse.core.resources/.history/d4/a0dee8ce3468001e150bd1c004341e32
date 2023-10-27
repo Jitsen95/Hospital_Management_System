@@ -1,0 +1,72 @@
+package com.HMS.Department.ServiceImpl;
+
+import java.util.List;
+import java.util.UUID;
+import java.util.stream.Collectors;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.HMS.Department.Dto.DepartmentDto;
+import com.HMS.Department.Model.Department;
+import com.HMS.Department.Repository.DepartmentRepository;
+import com.HMS.Department.Service.DepartmentService;
+
+@Service
+public class DepartmentServiceImpl implements DepartmentService {
+
+	@Autowired
+	DepartmentRepository departmentRepo;
+
+	@Autowired
+	ModelMapper mapper;
+
+	@Override
+	public DepartmentDto createDepartment(DepartmentDto departmentDto) {
+
+		String departmentId = UUID.randomUUID().toString();
+		departmentDto.setDepartmentId(departmentId);
+		Department department = mapper.map(departmentDto, Department.class);
+		Department savedDepart = departmentRepo.save(department);
+		DepartmentDto savedDto = mapper.map(savedDepart, DepartmentDto.class);
+		return savedDto;
+	}
+
+	@Override
+	public DepartmentDto findById(String departmentId) {
+		Department department = departmentRepo.findById(departmentId)
+				.orElseThrow(() -> new RuntimeException("Not Found With This Id!!!"));
+		DepartmentDto departmentDto = mapper.map(department, DepartmentDto.class);
+		return departmentDto;
+	}
+
+	@Override
+	public List<DepartmentDto> findAllDepartment() {
+		List<Department> departmentList = departmentRepo.findAll();
+		List<DepartmentDto> DepartmentDtoList = departmentList.stream().map(e -> mapper.map(e, DepartmentDto.class))
+				.collect(Collectors.toList());
+		return DepartmentDtoList;
+	}
+
+	@Override
+	public DepartmentDto updateDepartment(DepartmentDto departmentDto, String departmentId) {
+		Department department = departmentRepo.findById(departmentId)
+				.orElseThrow(() -> new RuntimeException("Not Found With This Id!!!"));
+		department.setName(departmentDto.getName());
+		department.setAbout(departmentDto.getAbout());
+		Department updatedDepartment=departmentRepo.save(department);
+		DepartmentDto departmentDto1=mapper.map(updatedDepartment,DepartmentDto.class);
+		return departmentDto1;
+	}
+
+	@Override
+	public String deleteDepartmentById(String departmentId) {
+		Department department = departmentRepo.findById(departmentId)
+				.orElseThrow(() -> new RuntimeException("Not Found With This Id!!!"));
+		departmentRepo.deleteById(departmentId);
+		
+		return "Department Removed!!!";
+	}
+
+}

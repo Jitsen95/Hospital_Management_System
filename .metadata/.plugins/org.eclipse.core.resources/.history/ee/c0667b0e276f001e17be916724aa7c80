@@ -1,0 +1,11 @@
+package com.HMS.Appointment.Entity;
+
+public class DoctorDto {
+	
+	private String doctorId;
+	private String firstName;
+	private String lastName;
+	private String mobile;
+	private String email;
+
+}

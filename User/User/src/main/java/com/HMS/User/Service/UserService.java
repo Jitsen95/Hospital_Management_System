@@ -1,0 +1,33 @@
+package com.HMS.User.Service;
+
+import com.HMS.User.Dto.UserDto;
+import com.HMS.User.Entity.User;
+
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Service
+public interface UserService {
+
+    UserDto createUser(UserDto userDto);
+
+    UserDto findById(String userId);
+    UserDto findByUserId(String userId);
+
+    List<UserDto> findAllUser(int pageNumber,int pageSize);
+
+    UserDto updateUser(UserDto userDto,String userId);
+
+    String deleteUserById(String userId);
+
+    List<UserDto> findByFirstName(String firstName);
+
+	UserDto findByEmail(String email);
+
+	List<UserDto> findByCity(String city);
+
+	UserDto findByMobile(long mobile);
+
+
+}

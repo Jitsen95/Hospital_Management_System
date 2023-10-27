@@ -1,0 +1,50 @@
+package com.HMS.Appointment.ServiceImpl;
+
+import java.util.UUID;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.HMS.Appointment.Dto.AppointmentDto;
+import com.HMS.Appointment.Entity.Appointment;
+import com.HMS.Appointment.Repository.AppoinmentRepository;
+import com.HMS.Appointment.Service.AppointmentService;
+@Service
+public class AppoinmentServiceImpl implements AppointmentService{
+	
+	@Autowired
+	AppoinmentRepository appointmentRepo;
+	
+	@Autowired
+	ModelMapper mapper;
+	
+	@Autowired
+	private ApiClient apiclient;
+
+	@Override
+	public AppointmentDto createAppointment(AppointmentDto appointmentDto) {
+		String appointmentId=UUID.randomUUID().toString();
+		appointmentDto.setAppointmentId(appointmentId);
+		Appointment appointment=mapper.map(appointmentDto,Appointment.class);
+		Appointment savedappointment =appointmentRepo.save(appointment);
+		AppointmentDto savedDto=mapper.map(savedappointment, AppointmentDto.class);
+		return savedDto;
+	}
+
+	@Override
+	public AppointmentDto findById(String appointmentId) {
+		Appointment appointment=appointmentRepo.findById(appointmentId).orElseThrow(
+				()->new RuntimeException("Not found with this ID")
+				);
+		AppointmentDto appointmentDto=mapper.map(appointment, AppointmentDto.class);
+		
+		apiClient
+		
+		
+		return null;
+	}
+	
+	
+
+}

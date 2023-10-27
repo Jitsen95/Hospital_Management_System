@@ -1,0 +1,13 @@
+package com.HMS.Appointment.Configuration;
+
+import org.modelmapper.ModelMapper;
+import org.springframework.context.annotation.Bean;
+
+public class ProjectConfig {
+	
+	@Bean
+	public ModelMapper modelMapper() {
+		return new  ModelMapper();
+	}
+
+}

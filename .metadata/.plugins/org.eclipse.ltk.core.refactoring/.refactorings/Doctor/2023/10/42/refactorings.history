@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<session version="1.0">
+<refactoring comment="Rename compilation unit &apos;com.HMS.Doctor.Exception.DoctorNotFoundException.java&apos; to &apos;ResourceNotFoundException.java&apos;&#x0D;&#x0A;- Original project: &apos;Doctor&apos;&#x0D;&#x0A;- Original element: &apos;com.HMS.Doctor.Exception.DoctorNotFoundException.java&apos;&#x0D;&#x0A;- Renamed element: &apos;com.HMS.Doctor.Exception.ResourceNotFoundException.java&apos;" description="Rename compilation unit &apos;DoctorNotFoundException.java&apos;" flags="2" id="org.eclipse.jdt.ui.rename.compilationunit" input="/src\/main\/java=/optional=/true=/=/maven.pomderived=/true=/&lt;com.HMS.Doctor.Exception{DoctorNotFoundException.java" name="ResourceNotFoundException.java" references="false" stamp="1697784703597" version="1.0"/>
+</session>

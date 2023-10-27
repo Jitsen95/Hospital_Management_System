@@ -1,0 +1,89 @@
+package com.HMS.Department.Controller;
+
+import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+import com.HMS.Department.Dto.ApiResponseDto;
+import com.HMS.Department.Dto.DepartmentDto;
+import com.HMS.Department.Service.DepartmentService;
+
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/Department")
+public class DepartmentController {
+
+	@Autowired
+	DepartmentService departService;
+
+	@PostMapping("/add")
+	public ResponseEntity<DepartmentDto> createUser(@Valid @RequestBody DepartmentDto departmentDto) {
+		return new ResponseEntity<DepartmentDto>(departService.createDepartment(departmentDto), HttpStatus.CREATED);
+	}
+
+	@GetMapping("/byId/{departmentId}")
+	public ResponseEntity<DepartmentDto> findById(@PathVariable("departmentId") String departmentId) {
+		return new ResponseEntity<>(departService.findById(departmentId), HttpStatus.FOUND);
+	}
+	@GetMapping("/byDepartmentId/{departmentId}")
+	public DepartmentDto findByDepartmentId(@PathVariable("departmentId") String departmentId) {
+		return (departService.findByDepartmentId (departmentId));
+	}
+
+	@GetMapping("/all")
+	public ResponseEntity<List<DepartmentDto>> findAllUsers(
+			@RequestParam(value="pageNumber",defaultValue="0",required=false)int pageNumber,
+			@RequestParam(value="pageSize",defaultValue="5",required=false)int pageSize
+			
+			
+			) {
+		return new ResponseEntity<>(departService.findAllDepartment(), HttpStatus.FOUND);
+	}
+
+	@PutMapping("/update/{departmentId}")
+	public ResponseEntity<DepartmentDto> updateUser(@PathVariable("departmentId") String departmentId,
+			@RequestBody DepartmentDto departmentDto) {
+		return new ResponseEntity<>(departService.updateDepartment(departmentDto, departmentId), HttpStatus.OK);
+	}
+
+	@DeleteMapping("/remove/{departmentId}")
+	public ResponseEntity<String> deleteDepartmentById(@PathVariable("departmentId") String departmentId) {
+		return new ResponseEntity<>(departService.deleteDepartmentById(departmentId), HttpStatus.OK);
+
+	}
+	
+	@GetMapping("/byName/{departmentName}")
+	public ResponseEntity<DepartmentDto> findByName(@PathVariable("departmentName") String departmentName){
+		 DepartmentDto department=departService.findByDepartmentName(departmentName);
+		return new ResponseEntity<DepartmentDto>(department,HttpStatus.FOUND);
+	}
+	@GetMapping("/byCode/{departmentCode}")
+	public ResponseEntity<DepartmentDto> findByCode(@PathVariable("departmentCode") String departmentCode){
+		 DepartmentDto department=departService.findByDepartmentCode(departmentCode);
+		return new ResponseEntity<DepartmentDto>(department,HttpStatus.FOUND);
+	}
+	
+	@GetMapping("/byNameForDoctor/{departmentName}")
+	public ResponseEntity<ApiResponseDto> findDoctorListWithDepartmentName(@PathVariable("departmentName") String departmentName){
+		 ApiResponseDto department=departService.findByDepartmentNameWithDoctorList(departmentName);
+		return new ResponseEntity<ApiResponseDto>(department,HttpStatus.FOUND);
+	}
+	@GetMapping("/byCodeForDoctor/{departmentCode}")
+	public ResponseEntity<ApiResponseDto> findDoctorListWithDepartmentCode(@PathVariable("departmentCode") String departmentCode){
+		ApiResponseDto apiResponseDto=departService.findByDepartmentCodeWithDoctorList(departmentCode);
+		return new ResponseEntity<ApiResponseDto>(apiResponseDto,HttpStatus.FOUND);
+	}
+
+}
